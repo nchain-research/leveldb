@@ -173,6 +173,8 @@ class WindowsSequentialFile : public SequentialFile {
     return Status::OK();
   }
 
+  std::string GetName() const override { return filename_; }
+
  private:
   const ScopedHandle handle_;
   const std::string filename_;
@@ -205,6 +207,8 @@ class WindowsRandomAccessFile : public RandomAccessFile {
     return Status::OK();
   }
 
+  std::string GetName() const override { return filename_; }
+
  private:
   const ScopedHandle handle_;
   const std::string filename_;
@@ -235,6 +239,8 @@ class WindowsMmapReadableFile : public RandomAccessFile {
     *result = Slice(mmap_base_ + offset, n);
     return Status::OK();
   }
+
+  std::string GetName() const override { return filename_; }
 
  private:
   char* const mmap_base_;
@@ -304,6 +310,8 @@ class WindowsWritableFile : public WritableFile {
     }
     return Status::OK();
   }
+
+  std::string GetName() const override { return filename_; }
 
  private:
   Status FlushBuffer() {
