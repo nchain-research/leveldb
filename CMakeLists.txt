@@ -30,9 +30,9 @@ else (WIN32)
   set(LEVELDB_PLATFORM_NAME LEVELDB_PLATFORM_POSIX)
 endif (WIN32)
 
-option(LEVELDB_BUILD_TESTS "Build LevelDB's unit tests" ON)
-option(LEVELDB_BUILD_BENCHMARKS "Build LevelDB's benchmarks" ON)
-option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
+option(LEVELDB_BUILD_TESTS "Build LevelDB's unit tests" OFF)
+option(LEVELDB_BUILD_BENCHMARKS "Build LevelDB's benchmarks" OFF)
+option(LEVELDB_INSTALL "Install LevelDB's header and library" OFF)
 
 include(CheckIncludeFile)
 check_include_file("unistd.h" HAVE_UNISTD_H)
@@ -286,6 +286,13 @@ if(LEVELDB_BUILD_TESTS)
   set(install_gtest OFF)
   set(install_gmock OFF)
   set(build_gmock ON)
+
+  # Setup submodules
+  find_package(PythonInterp 3 REQUIRED)
+  message("Initialising leveldb googletest submodule")
+  execute_process(COMMAND git submodule update --init -- third_party/googletest WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+  message("Initialising leveldb benchmark submodule")
+  execute_process(COMMAND git submodule update --init -- third_party/benchmark WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
   # This project is tested using GoogleTest.
   add_subdirectory("third_party/googletest")
