@@ -38,9 +38,14 @@ include(CheckIncludeFile)
 check_include_file("unistd.h" HAVE_UNISTD_H)
 
 include(CheckLibraryExists)
-check_library_exists(crc32c crc32c_value "" HAVE_CRC32C)
 check_library_exists(snappy snappy_compress "" HAVE_SNAPPY)
 check_library_exists(tcmalloc malloc "" HAVE_TCMALLOC)
+
+# We should have libcrc32c in our build
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/crc32c")
+  add_subdirectory("crc32c")
+  set(HAVE_CRC32C 1)
+endif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/crc32c")
 
 include(CheckCXXSymbolExists)
 # Using check_cxx_symbol_exists() instead of check_c_symbol_exists() because
